@@ -7,5 +7,5 @@ public interface UserService {
 
   Boolean checkIfUserExists(UserValidationRequestDto dto);
 
-  void saveUser(UserSyncDto dto);
+  boolean saveUser(UserSyncDto dto);
 }

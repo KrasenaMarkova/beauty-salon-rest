@@ -23,11 +23,28 @@ public class UserServiceImpl implements UserService {
 
   }
 
+//  @Override
+//  public void saveUser(UserSyncDto dto) {
+//    if (userRepository.existsByEmail(dto.getEmail()) ||
+//        userRepository.existsByUsername(dto.getUsername())) {
+//      throw new RuntimeException("User already exists in microservice DB!");
+//    }
+//
+//    UserEntity user = new UserEntity();
+//    user.setUsername(dto.getUsername());
+//    user.setEmail(dto.getEmail());
+//    user.setPhone(dto.getPhone());
+//    user.setPassword(dto.getPassword());
+//    user.setActive(true);
+//    userRepository.save(user);
+//
+//  }
+
   @Override
-  public void saveUser(UserSyncDto dto) {
+  public boolean saveUser(UserSyncDto dto) {
     if (userRepository.existsByEmail(dto.getEmail()) ||
         userRepository.existsByUsername(dto.getUsername())) {
-      throw new RuntimeException("User already exists in microservice DB!");
+      return false; // потребителят вече съществува
     }
 
     UserEntity user = new UserEntity();
@@ -38,6 +55,9 @@ public class UserServiceImpl implements UserService {
     user.setActive(true);
     userRepository.save(user);
 
+    return true; // успешно записан
   }
+
+
 }
 
