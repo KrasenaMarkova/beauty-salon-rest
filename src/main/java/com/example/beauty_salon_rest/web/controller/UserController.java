@@ -6,6 +6,7 @@ import com.example.beauty_salon_rest.service.UserService;
 import com.example.beauty_salon_rest.web.dto.StatusResponseDto;
 import com.example.beauty_salon_rest.web.dto.UserSyncDto;
 import com.example.beauty_salon_rest.web.dto.UserValidationRequestDto;
+import com.example.beauty_salon_rest.web.dto.UserValidationResponseDto;
 import com.example.beauty_salon_rest.web.mapper.DtoMapper;
 import java.util.List;
 import java.util.UUID;
@@ -30,14 +31,11 @@ public class UserController {
 
   @PostMapping("/validation")
   public ResponseEntity<Boolean> checkUserExists(@RequestBody UserValidationRequestDto dto) {
+
+    UserValidationResponseDto response = userService.checkUserExistsWithMessage(dto);
+
     return ResponseEntity.ok(userService.checkIfUserExists(dto));
   }
-
-//  @PostMapping("/sync")
-//  public ResponseEntity<Void> syncUser(@RequestBody UserSyncDto dto) {
-//    userService.saveUser(dto);
-//    return ResponseEntity.ok().build();
-//  }
 
   @PostMapping("/sync")
   public ResponseEntity<String> syncUser(@RequestBody UserSyncDto dto) {
@@ -53,7 +51,6 @@ public class UserController {
 
   @PutMapping("/toggle-status/{id}")
   public ResponseEntity<StatusResponseDto> toggleUserStatus(@PathVariable UUID id) {
-//    UserEntity user = userService.findById(id);
     UserEntity updatedUser = userService.changeStatus(id);
     return ResponseEntity.ok(DtoMapper.from(updatedUser));
   }
