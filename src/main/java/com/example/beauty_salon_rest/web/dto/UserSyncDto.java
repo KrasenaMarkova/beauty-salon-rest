@@ -1,4 +1,4 @@
-package com.example.beauty_salon_rest.dto;
+package com.example.beauty_salon_rest.web.dto;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;

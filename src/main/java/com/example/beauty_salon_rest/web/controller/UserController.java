@@ -1,17 +1,18 @@
-package com.example.beauty_salon_rest.controller;
+package com.example.beauty_salon_rest.web.controller;
 
-import com.example.beauty_salon_rest.dto.UserSyncDto;
-import com.example.beauty_salon_rest.dto.UserValidationRequestDto;
 import com.example.beauty_salon_rest.entity.UserEntity;
 import com.example.beauty_salon_rest.repository.UserRepository;
 import com.example.beauty_salon_rest.service.UserService;
+import com.example.beauty_salon_rest.web.dto.StatusRequestDto;
+import com.example.beauty_salon_rest.web.dto.StatusResponseDto;
+import com.example.beauty_salon_rest.web.dto.UserSyncDto;
+import com.example.beauty_salon_rest.web.dto.UserValidationRequestDto;
+import com.example.beauty_salon_rest.web.mapper.DtoMapper;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,10 +51,10 @@ public class UserController {
   }
 
   @PutMapping("/toggle-status/{id}")
-  public ResponseEntity<String> toggleUserStatus(@PathVariable UUID id) {
-    UserEntity updatedUser = userService.toggleUserStatus(id);
-    String status = updatedUser.isActive() ? "active" : "inactive";
-    return ResponseEntity.ok("User " + updatedUser.getUsername() + " is now " + status);
+  public ResponseEntity<StatusResponseDto> toggleUserStatus(@RequestBody StatusRequestDto request) {
+    UserEntity updateUserStatus = userService.changeStatus(request);
+
+    return ResponseEntity.ok(DtoMapper.from(updateUserStatus));
   }
 
 
