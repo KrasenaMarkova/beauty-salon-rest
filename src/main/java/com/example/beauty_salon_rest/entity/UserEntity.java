@@ -19,11 +19,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class UserEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
+  @Column(unique = true, nullable = false)
   private UUID id;
 
   @Column(nullable = false, unique = true)
