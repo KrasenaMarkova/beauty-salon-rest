@@ -1,11 +1,9 @@
 package com.example.beauty_salon_rest.service;
 
-import com.example.beauty_salon_rest.web.dto.StatusRequestDto;
-import com.example.beauty_salon_rest.web.dto.UserSyncDto;
-import com.example.beauty_salon_rest.web.dto.UserValidationRequestDto;
 import com.example.beauty_salon_rest.entity.UserEntity;
 import com.example.beauty_salon_rest.repository.UserRepository;
-import java.util.Optional;
+import com.example.beauty_salon_rest.web.dto.UserSyncDto;
+import com.example.beauty_salon_rest.web.dto.UserValidationRequestDto;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,41 +22,6 @@ public class UserService {
     return existsByEmail || existsByUsername;
 
   }
-
-//  @Override
-//  public void saveUser(UserSyncDto dto) {
-//    if (userRepository.existsByEmail(dto.getEmail()) ||
-//        userRepository.existsByUsername(dto.getUsername())) {
-//      throw new RuntimeException("User already exists in microservice DB!");
-//    }
-//
-//    UserEntity user = new UserEntity();
-//    user.setUsername(dto.getUsername());
-//    user.setEmail(dto.getEmail());
-//    user.setPhone(dto.getPhone());
-//    user.setPassword(dto.getPassword());
-//    user.setActive(true);
-//    userRepository.save(user);
-//
-//  }
-
-//  @Override
-//  public boolean saveUser(UserSyncDto dto) {
-//    if (userRepository.existsByEmail(dto.getEmail()) ||
-//        userRepository.existsByUsername(dto.getUsername())) {
-//      return false; // потребителят вече съществува
-//    }
-//
-//    UserEntity user = new UserEntity();
-//    user.setUsername(dto.getUsername());
-//    user.setEmail(dto.getEmail());
-//    user.setPhone(dto.getPhone());
-//    user.setPassword(dto.getPassword());
-//    user.setActive(true);
-//    userRepository.save(user);
-//
-//    return true; // успешно записан
-//  }
 
   public boolean saveUser(UserSyncDto dto) {
     UserEntity user;
@@ -80,33 +43,19 @@ public class UserService {
 
     userRepository.save(user);
 
-    return true; // успешно записан или обновен
+    return true;
   }
 
-//  @Override
-//  public UserEntity toggleUserStatus(UUID id) {
-//    UserEntity user = userRepository.findById(id)
-//        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Потребителят не е намерен!"));
-//
-//    user.setActive(!user.isActive());
-//    userRepository.save(user);
-//
-//    return user;
-//  }
-
-
-  public UserEntity changeStatus(StatusRequestDto request) {
-    Optional<UserEntity> user = userRepository.findById(request.getId());
-
-    if (!user.get().isActive()) {
-      user.get().setActive(!request.isActive());
-    } else {
-      user.get().setActive(request.isActive());
-    }
-
-    return userRepository.save(user.get());
+  public UserEntity changeStatus(UUID id) {
+    UserEntity user = findById(id);
+    user.setActive(!user.isActive());
+    return userRepository.save(user);
   }
 
+  public UserEntity findById(UUID id) {
+    return userRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Потребител с това ID не е намерен: " + id));
+  }
 
 }
 
