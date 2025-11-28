@@ -2,8 +2,8 @@ package com.example.beauty_salon_rest.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.UUID;
@@ -41,6 +41,10 @@ public class UserEntity {
 
   @Column(nullable = false)
   private String phone;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private UserRole userRole;
 
   private boolean active;
 

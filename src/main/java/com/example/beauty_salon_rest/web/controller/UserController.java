@@ -4,6 +4,7 @@ import com.example.beauty_salon_rest.entity.UserEntity;
 import com.example.beauty_salon_rest.repository.UserRepository;
 import com.example.beauty_salon_rest.service.UserService;
 import com.example.beauty_salon_rest.web.dto.StatusResponseDto;
+import com.example.beauty_salon_rest.web.dto.UserRoleResponseDto;
 import com.example.beauty_salon_rest.web.dto.UserSyncDto;
 import com.example.beauty_salon_rest.web.dto.UserValidationRequestDto;
 import com.example.beauty_salon_rest.web.dto.UserValidationResponseDto;
@@ -54,6 +55,13 @@ public class UserController {
     UserEntity updatedUser = userService.changeStatus(id);
     return ResponseEntity.ok(DtoMapper.from(updatedUser));
   }
+
+  @PutMapping("/{id}/toggle-role")
+  public ResponseEntity<UserRoleResponseDto> toggleUserRole(@PathVariable UUID id) {
+    UserEntity changeUserRole = userService.changeUserRole(id);
+    return ResponseEntity.ok(DtoMapper.mapRole(changeUserRole));
+  }
+
 
   @GetMapping
   public List<UserEntity> getAllUsers() {

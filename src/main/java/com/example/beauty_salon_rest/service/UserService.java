@@ -1,6 +1,9 @@
 package com.example.beauty_salon_rest.service;
 
+import static com.example.beauty_salon_rest.entity.UserRole.USER;
+
 import com.example.beauty_salon_rest.entity.UserEntity;
+import com.example.beauty_salon_rest.entity.UserRole;
 import com.example.beauty_salon_rest.repository.UserRepository;
 import com.example.beauty_salon_rest.web.dto.UserSyncDto;
 import com.example.beauty_salon_rest.web.dto.UserValidationRequestDto;
@@ -63,6 +66,7 @@ public class UserService {
     user.setEmail(dto.getEmail());
     user.setPhone(dto.getPhone());
     user.setPassword(dto.getPassword());
+    user.setUserRole(USER);
     user.setActive(dto.isActive());
 
     userRepository.save(user);
@@ -72,6 +76,18 @@ public class UserService {
   public UserEntity changeStatus(UUID id) {
     UserEntity user = findById(id);
     user.setActive(!user.isActive());
+    return userRepository.save(user);
+  }
+
+  public UserEntity changeUserRole(UUID id) {
+    UserEntity user = findById(id);
+
+    if (user.getUserRole() == UserRole.USER) {
+      user.setUserRole(UserRole.ADMIN);
+    } else {
+      user.setUserRole(UserRole.USER);
+    }
+    System.out.println();
     return userRepository.save(user);
   }
 
