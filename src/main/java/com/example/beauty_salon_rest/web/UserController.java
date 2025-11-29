@@ -1,4 +1,4 @@
-package com.example.beauty_salon_rest.web.controller;
+package com.example.beauty_salon_rest.web;
 
 import com.example.beauty_salon_rest.entity.UserEntity;
 import com.example.beauty_salon_rest.repository.UserRepository;
@@ -9,12 +9,10 @@ import com.example.beauty_salon_rest.web.dto.UserSyncDto;
 import com.example.beauty_salon_rest.web.dto.UserValidationRequestDto;
 import com.example.beauty_salon_rest.web.dto.UserValidationResponseDto;
 import com.example.beauty_salon_rest.web.mapper.DtoMapper;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -29,6 +27,8 @@ public class UserController {
 
   private final UserService userService;
   private final UserRepository userRepository;
+
+  // TODO -	Define at least 1 GET endpoint that is being invoked and used by the Main application.
 
   @PostMapping("/validation")
   public ResponseEntity<Boolean> checkUserExists(@RequestBody UserValidationRequestDto dto) {
@@ -62,10 +62,16 @@ public class UserController {
     return ResponseEntity.ok(DtoMapper.mapRole(changeUserRole));
   }
 
+//  @GetMapping
+//  public ResponseEntity<UserRoleResponseDto> getUserRole(@RequestParam UUID id) {
+//    UserEntity userId = userService.findById(id);
+//
+//    return ResponseEntity.ok(DtoMapper.mapRole(userId));
+//  }
 
-  @GetMapping
-  public List<UserEntity> getAllUsers() {
-    return userRepository.findAll();
-  }
+//  @GetMapping
+//  public List<UserEntity> getAllUsers() {
+//    return userRepository.findAll();
+//  }
 
 }
