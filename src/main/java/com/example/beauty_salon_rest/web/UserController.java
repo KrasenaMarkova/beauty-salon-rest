@@ -2,22 +2,25 @@ package com.example.beauty_salon_rest.web;
 
 import com.example.beauty_salon_rest.entity.UserEntity;
 import com.example.beauty_salon_rest.repository.UserRepository;
-import com.example.beauty_salon_rest.service.UserService;
+import com.example.beauty_salon_rest.service.UserServiceImpl;
 import com.example.beauty_salon_rest.web.dto.StatusResponseDto;
+import com.example.beauty_salon_rest.web.dto.UserDto;
 import com.example.beauty_salon_rest.web.dto.UserRoleResponseDto;
-import com.example.beauty_salon_rest.web.dto.UserSyncDto;
 import com.example.beauty_salon_rest.web.dto.UserValidationRequestDto;
 import com.example.beauty_salon_rest.web.dto.UserValidationResponseDto;
 import com.example.beauty_salon_rest.web.mapper.DtoMapper;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,8 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-  private final UserService userService;
-  private final UserRepository userRepository;
+  private final UserServiceImpl userService;
 
   // TODO -	Define at least 1 GET endpoint that is being invoked and used by the Main application.
 
@@ -38,40 +40,41 @@ public class UserController {
     return ResponseEntity.ok(userService.checkIfUserExists(dto));
   }
 
-  @PostMapping("/sync")
-  public ResponseEntity<String> syncUser(@RequestBody UserSyncDto dto) {
-    boolean success = userService.saveUser(dto);
-
-    if (success) {
-      return ResponseEntity.ok("User synced successfully!");
-    } else {
-      return ResponseEntity.status(HttpStatus.CONFLICT)
-          .body("User already exists!");
-    }
-  }
-
   @PutMapping("/toggle-status/{id}")
   public ResponseEntity<StatusResponseDto> toggleUserStatus(@PathVariable UUID id) {
-    UserEntity updatedUser = userService.changeStatus(id);
-    return ResponseEntity.ok(DtoMapper.from(updatedUser));
+    UserDto userDto = userService.changeStatus(id);
+    return ResponseEntity.ok(DtoMapper.from(userDto));
   }
 
   @PutMapping("/{id}/toggle-role")
   public ResponseEntity<UserRoleResponseDto> toggleUserRole(@PathVariable UUID id) {
-    UserEntity changeUserRole = userService.changeUserRole(id);
-    return ResponseEntity.ok(DtoMapper.mapRole(changeUserRole));
+    UserDto userDto = userService.changeUserRole(id);
+    return ResponseEntity.ok(DtoMapper.mapRole(userDto));
   }
 
-//  @GetMapping
-//  public ResponseEntity<UserRoleResponseDto> getUserRole(@RequestParam UUID id) {
-//    UserEntity userId = userService.findById(id);
-//
-//    return ResponseEntity.ok(DtoMapper.mapRole(userId));
-//  }
+  @PostMapping
+  public ResponseEntity<UserDto> saveUser(@RequestBody UserDto dto) {
+    return ResponseEntity.ok(userService.saveUser(dto));
+  }
 
-//  @GetMapping
-//  public List<UserEntity> getAllUsers() {
-//    return userRepository.findAll();
-//  }
+  @PutMapping
+  public ResponseEntity<UserDto> updateUser(@RequestBody UserDto dto) {
+    return ResponseEntity.ok(userService.updateUser(dto));
+  }
+
+  @GetMapping
+  public ResponseEntity<UserDto> loadByUsername(@RequestParam String username) {
+    return ResponseEntity.ok(userService.findByUsername(username));
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<UserDto> loadById(@PathVariable UUID id) {
+    return ResponseEntity.ok(userService.findById(id));
+  }
+
+  @GetMapping("/list")
+  public ResponseEntity<List<UserDto>> findAll() {
+    return ResponseEntity.ok(userService.listAll());
+  }
 
 }

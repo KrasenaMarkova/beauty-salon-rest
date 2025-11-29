@@ -1,5 +1,6 @@
 package com.example.beauty_salon_rest.web.dto;
 
+import com.example.beauty_salon_rest.entity.UserRole;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,13 +13,13 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserSyncDto {
+public class UserDto {
 
   private UUID id;
   private String username;
   private String firstName;
   private String lastName;
-  private String userRole;
+  private UserRole userRole;
   private String email;
   private String phone;
   private String password;
