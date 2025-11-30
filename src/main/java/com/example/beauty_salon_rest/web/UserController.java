@@ -1,8 +1,6 @@
 package com.example.beauty_salon_rest.web;
 
-import com.example.beauty_salon_rest.entity.UserEntity;
-import com.example.beauty_salon_rest.repository.UserRepository;
-import com.example.beauty_salon_rest.service.UserServiceImpl;
+import com.example.beauty_salon_rest.service.UserService;
 import com.example.beauty_salon_rest.web.dto.StatusResponseDto;
 import com.example.beauty_salon_rest.web.dto.UserDto;
 import com.example.beauty_salon_rest.web.dto.UserRoleResponseDto;
@@ -12,7 +10,6 @@ import com.example.beauty_salon_rest.web.mapper.DtoMapper;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,15 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-  private final UserServiceImpl userService;
-
-  // TODO -	Define at least 1 GET endpoint that is being invoked and used by the Main application.
+  private final UserService userService;
 
   @PostMapping("/validation")
   public ResponseEntity<Boolean> checkUserExists(@RequestBody UserValidationRequestDto dto) {
 
     UserValidationResponseDto response = userService.checkUserExistsWithMessage(dto);
-
     return ResponseEntity.ok(userService.checkIfUserExists(dto));
   }
 

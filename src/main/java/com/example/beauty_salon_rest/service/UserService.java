@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl {
+public class UserService {
 
   private final UserRepository userRepository;
 
@@ -42,9 +42,6 @@ public class UserServiceImpl {
         message = "Този email е вече регистриран";
       }
     }
-//    else {
-//      message = "Потребителят е наличен";
-//    }
 
     log.info("Check user exists: username={}, email={}, exists={}",
         dto.getUsername(), dto.getEmail(), exists);
@@ -54,7 +51,6 @@ public class UserServiceImpl {
 
   public UserDto saveUser(UserDto dto) {
 
-    //validation
     UserValidationRequestDto validationDto = UserValidationRequestDto.builder()
         .username(dto.getUsername())
         .email(dto.getEmail())
@@ -63,7 +59,7 @@ public class UserServiceImpl {
     if (validationResult) {
       throw new RuntimeException("User already exists");
     }
-    //save
+
     UserEntity userEntity = UserEntity.builder()
         .firstName(dto.getFirstName())
         .lastName(dto.getLastName())
@@ -74,7 +70,7 @@ public class UserServiceImpl {
         .userRole(dto.getUserRole())
         .active(Boolean.TRUE)
         .build();
-    //return user
+
     userRepository.save(userEntity);
 
     dto.setId(userEntity.getId());
@@ -92,25 +88,27 @@ public class UserServiceImpl {
     UserEntity userEntity = userRepository.findById(dto.getId())
         .orElseThrow(() -> new RuntimeException("User with ID = " + dto.getId() + " not found"));
 
-    //TODO: validation check mail and phone
+    //TODO: validation check mail
     userEntity.setPhone(dto.getPhone());
     userEntity.setFirstName(dto.getFirstName());
     userEntity.setLastName(dto.getLastName());
     userEntity.setEmail(dto.getEmail());
 
-    //return user
     userRepository.save(userEntity);
 
     return dto;
   }
 
   public UserDto changeStatus(UUID id) {
+
     UserEntity user = findEntityById(id);
     user.setActive(!user.isActive());
+
     return transformToDto(userRepository.save(user));
   }
 
   public UserDto changeUserRole(UUID id) {
+
     UserEntity user = findEntityById(id);
 
     if (user.getUserRole() == UserRole.USER) {
@@ -118,11 +116,12 @@ public class UserServiceImpl {
     } else {
       user.setUserRole(UserRole.USER);
     }
-    System.out.println();
+
     return transformToDto(userRepository.save(user));
   }
 
   public UserDto findById(UUID id) {
+
     UserEntity userEntity = userRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("Потребител с това ID не е намерен: " + id));
 
@@ -130,6 +129,7 @@ public class UserServiceImpl {
   }
 
   public UserDto findByUsername(String username) {
+
     UserEntity userEntity = userRepository.findByUsername(username)
         .orElseThrow(() -> new RuntimeException("Потребител с потребителско име не е намерен: " + username));
 
@@ -137,11 +137,13 @@ public class UserServiceImpl {
   }
 
   public UserEntity findEntityById(UUID id) {
+
     return userRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("Потребител с това ID не е намерен: " + id));
   }
 
   private UserDto transformToDto(UserEntity userEntity) {
+
     return UserDto.builder()
         .id(userEntity.getId())
         .password(userEntity.getPassword())
@@ -155,6 +157,7 @@ public class UserServiceImpl {
   }
 
   public List<UserDto> listAll() {
+
     return userRepository.findAll().stream().map(this::transformToDto).collect(Collectors.toList());
   }
 }
