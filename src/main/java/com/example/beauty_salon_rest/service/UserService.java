@@ -151,6 +151,7 @@ public class UserService {
         .firstName(userEntity.getFirstName())
         .lastName(userEntity.getLastName())
         .email(userEntity.getEmail())
+        .phone(userEntity.getPhone())
         .userRole(userEntity.getUserRole())
         .active(userEntity.isActive())
         .build();
