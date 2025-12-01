@@ -4,6 +4,7 @@ import static java.util.Objects.isNull;
 
 import com.example.beauty_salon_rest.entity.UserEntity;
 import com.example.beauty_salon_rest.entity.UserRole;
+import com.example.beauty_salon_rest.exception.UsernameNotFoundException;
 import com.example.beauty_salon_rest.repository.UserRepository;
 import com.example.beauty_salon_rest.web.dto.UserDto;
 import com.example.beauty_salon_rest.web.dto.UserValidationRequestDto;
@@ -135,7 +136,7 @@ public class UserService {
   public UserDto findByUsername(String username) {
 
     UserEntity userEntity = userRepository.findByUsername(username)
-        .orElseThrow(() -> new RuntimeException("Потребител с потребителско име не е намерен: " + username));
+        .orElseThrow(() -> new UsernameNotFoundException("Потребител с потребителско име "  + username + " не е намерен: "));
 
     return transformToDto(userEntity);
   }
