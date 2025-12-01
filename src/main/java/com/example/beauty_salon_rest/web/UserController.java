@@ -30,7 +30,7 @@ public class UserController {
   @PostMapping("/validation")
   public ResponseEntity<Boolean> checkUserExists(@RequestBody UserValidationRequestDto dto) {
 
-    UserValidationResponseDto response = userService.checkUserExistsWithMessage(dto);
+//    UserValidationResponseDto response = userService.checkUserExistsWithMessage(dto);
     return ResponseEntity.ok(userService.checkIfUserExists(dto));
   }
 

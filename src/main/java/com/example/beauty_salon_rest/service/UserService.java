@@ -30,24 +30,24 @@ public class UserService {
     return existsByEmail || existsByUsername;
   }
 
-  public UserValidationResponseDto checkUserExistsWithMessage(UserValidationRequestDto dto) {
-
-    boolean exists = checkIfUserExists(dto);
-
-    String message = "";
-    if (exists) {
-      if (userRepository.existsByUsername(dto.getUsername())) {
-        message = "Това потребителско име е заето";
-      } else {
-        message = "Този email е вече регистриран";
-      }
-    }
-
-    log.info("Check user exists: username={}, email={}, exists={}",
-        dto.getUsername(), dto.getEmail(), exists);
-
-    return new UserValidationResponseDto(exists, message);
-  }
+//  public UserValidationResponseDto checkUserExistsWithMessage(UserValidationRequestDto dto) {
+//
+//    boolean exists = checkIfUserExists(dto);
+//
+//    String message = "";
+//    if (exists) {
+//      if (userRepository.existsByUsername(dto.getUsername())) {
+//        message = "Това потребителско име е заето";
+//      } else {
+//        message = "Този email е вече регистриран";
+//      }
+//    }
+//
+//    log.info("Check user exists: username={}, email={}, exists={}",
+//        dto.getUsername(), dto.getEmail(), exists);
+//
+//    return new UserValidationResponseDto(exists, message);
+//  }
 
   public UserDto saveUser(UserDto dto) {
 
@@ -88,14 +88,18 @@ public class UserService {
     UserEntity userEntity = userRepository.findById(dto.getId())
         .orElseThrow(() -> new RuntimeException("User with ID = " + dto.getId() + " not found"));
 
-    //TODO: validation check mail
+    String newEmail = dto.getEmail();
+    boolean emailExist = userRepository.existsByEmail(newEmail);
+    if (emailExist) {
+      throw new RuntimeException("Email already exists");
+    }
+
     userEntity.setPhone(dto.getPhone());
     userEntity.setFirstName(dto.getFirstName());
     userEntity.setLastName(dto.getLastName());
     userEntity.setEmail(dto.getEmail());
 
     userRepository.save(userEntity);
-
     return dto;
   }
 
