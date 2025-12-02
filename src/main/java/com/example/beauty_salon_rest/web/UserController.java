@@ -5,7 +5,6 @@ import com.example.beauty_salon_rest.web.dto.StatusResponseDto;
 import com.example.beauty_salon_rest.web.dto.UserDto;
 import com.example.beauty_salon_rest.web.dto.UserRoleResponseDto;
 import com.example.beauty_salon_rest.web.dto.UserValidationRequestDto;
-import com.example.beauty_salon_rest.web.dto.UserValidationResponseDto;
 import com.example.beauty_salon_rest.web.mapper.DtoMapper;
 import java.util.List;
 import java.util.UUID;
@@ -29,8 +28,6 @@ public class UserController {
 
   @PostMapping("/validation")
   public ResponseEntity<Boolean> checkUserExists(@RequestBody UserValidationRequestDto dto) {
-
-//    UserValidationResponseDto response = userService.checkUserExistsWithMessage(dto);
     return ResponseEntity.ok(userService.checkIfUserExists(dto));
   }
 

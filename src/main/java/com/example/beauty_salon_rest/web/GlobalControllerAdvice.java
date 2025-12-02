@@ -24,9 +24,8 @@ public class GlobalControllerAdvice {
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleException(Exception e) {
 
-    ErrorResponse dto = new ErrorResponse(LocalDateTime.now(),e.getMessage());
+    ErrorResponse dto = new ErrorResponse(LocalDateTime.now(), e.getMessage());
 
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(dto);
   }
-
 }

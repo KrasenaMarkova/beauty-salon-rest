@@ -8,7 +8,6 @@ import com.example.beauty_salon_rest.exception.UsernameNotFoundException;
 import com.example.beauty_salon_rest.repository.UserRepository;
 import com.example.beauty_salon_rest.web.dto.UserDto;
 import com.example.beauty_salon_rest.web.dto.UserValidationRequestDto;
-import com.example.beauty_salon_rest.web.dto.UserValidationResponseDto;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -31,32 +30,15 @@ public class UserService {
     return existsByEmail || existsByUsername;
   }
 
-//  public UserValidationResponseDto checkUserExistsWithMessage(UserValidationRequestDto dto) {
-//
-//    boolean exists = checkIfUserExists(dto);
-//
-//    String message = "";
-//    if (exists) {
-//      if (userRepository.existsByUsername(dto.getUsername())) {
-//        message = "Това потребителско име е заето";
-//      } else {
-//        message = "Този email е вече регистриран";
-//      }
-//    }
-//
-//    log.info("Check user exists: username={}, email={}, exists={}",
-//        dto.getUsername(), dto.getEmail(), exists);
-//
-//    return new UserValidationResponseDto(exists, message);
-//  }
-
   public UserDto saveUser(UserDto dto) {
 
     UserValidationRequestDto validationDto = UserValidationRequestDto.builder()
         .username(dto.getUsername())
         .email(dto.getEmail())
         .build();
+
     Boolean validationResult = checkIfUserExists(validationDto);
+
     if (validationResult) {
       throw new RuntimeException("User already exists");
     }
@@ -136,7 +118,7 @@ public class UserService {
   public UserDto findByUsername(String username) {
 
     UserEntity userEntity = userRepository.findByUsername(username)
-        .orElseThrow(() -> new UsernameNotFoundException("Потребител с потребителско име "  + username + " не е намерен: "));
+        .orElseThrow(() -> new UsernameNotFoundException("Потребител с потребителско име " + username + " не е намерен: "));
 
     return transformToDto(userEntity);
   }
