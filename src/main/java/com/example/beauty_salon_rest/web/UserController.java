@@ -67,5 +67,4 @@ public class UserController {
   public ResponseEntity<List<UserDto>> findAll() {
     return ResponseEntity.ok(userService.listAll());
   }
-
 }
