@@ -163,6 +163,7 @@ public class UserServiceUTest {
 
     UserEntity existingUser = new UserEntity();
     existingUser.setId(userId);
+    existingUser.setEmail("different@example.com");
 
     when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
     when(userRepository.existsByEmail("existing@example.com")).thenReturn(true);
@@ -184,6 +185,7 @@ public class UserServiceUTest {
 
     UserEntity existingUser = new UserEntity();
     existingUser.setId(userId);
+    existingUser.setEmail("old@example.com");
 
     when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
     when(userRepository.existsByEmail("new@example.com")).thenReturn(false);

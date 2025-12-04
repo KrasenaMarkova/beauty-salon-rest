@@ -71,10 +71,11 @@ public class UserService {
     UserEntity userEntity = userRepository.findById(dto.getId())
         .orElseThrow(() -> new RuntimeException("User with ID = " + dto.getId() + " not found"));
 
-    String newEmail = dto.getEmail();
-    boolean emailExist = userRepository.existsByEmail(newEmail);
-    if (emailExist) {
-      throw new RuntimeException("Email already exists");
+    if (!userEntity.getEmail().equals(dto.getEmail())) {
+      boolean emailExist = userRepository.existsByEmail(dto.getEmail());
+      if (emailExist) {
+        throw new RuntimeException("Email already exists");
+      }
     }
 
     userEntity.setPhone(dto.getPhone());
