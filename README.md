@@ -47,7 +47,5 @@ It provides REST API endpoints for user registration, authentication, profile ma
 
 ## Testing
 - Use **Postman** to test all endpoints
-- Example registration request:
-  ```bash
-  GET http://localhost:8081/api/v1/users?username=vankata8563
+
 
